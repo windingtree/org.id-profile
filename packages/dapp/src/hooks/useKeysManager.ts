@@ -26,7 +26,7 @@ export type KeyType =
 export type Keys = KeyRecord[];
 
 export type UseKeysManagerHook = [
-  addKey: (record: KeyRecord) => void,
+  addKey: (record: KeyRecordRaw) => Promise<string | undefined>,
   updateKey: (record: KeyRecord) => void,
   removeKey: (tag: string) => void,
   revokeKey: (tag: string, reason:RevocationReason) => void,
@@ -78,10 +78,10 @@ const validateKeyWithSchema = (record: KeyRecord): string | null =>
     record
   );
 
-const findKeyById = (keys: KeyRecord[], id: string): KeyRecord | undefined =>
+export const findKeyById = (keys: KeyRecord[], id: string): KeyRecord | undefined =>
   keys.find((key) => key.id === id);
 
-const findKeyByTag = (keys: KeyRecord[], tag: string): KeyRecord | undefined =>
+export const findKeyByTag = (keys: KeyRecord[], tag: string): KeyRecord | undefined =>
   keys.find((key) => key.tag === tag);
 
 // UseKeysManager react hook
@@ -94,10 +94,11 @@ export const useKeysManager = (): UseKeysManagerHook => {
 
   useEffect(() => {
     setLoading(false);
+    setError(undefined);
   }, [keys])
 
   const addKey = useCallback(
-    (rawRecord: KeyRecordRaw): void => {
+    async (rawRecord: KeyRecordRaw): Promise<string | undefined> => {
       try {
         setLoading(true);
         const record = {
@@ -124,6 +125,7 @@ export const useKeysManager = (): UseKeysManagerHook => {
             record
           }
         });
+        return record.id
       } catch(error) {
         logger.error(error);
         setError((error as Error).message || UNKNOWN_ERROR);

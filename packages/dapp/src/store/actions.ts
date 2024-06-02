@@ -1,4 +1,5 @@
 import type { Web3ModalProvider } from '../hooks/useWeb3Modal';
+import type { KeyType } from '../hooks/useKeysManager';
 import type { IPFS } from '@windingtree/ipfs-apis';
 import type { IProviderInfo } from 'web3modal';
 import type { VerificationMethodReference } from '@windingtree/org.json-schema/types/org.json';

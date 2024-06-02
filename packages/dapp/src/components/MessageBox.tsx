@@ -30,7 +30,6 @@ export const MessageBox = ({
   return (
     <Box
       direction='row'
-      background='light-2'
       align='center'
       gap={size}
       pad={size}
